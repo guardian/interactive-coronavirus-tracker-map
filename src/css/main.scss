@@ -11,3 +11,23 @@
 .interactive-atom {
     margin: 0 !important;
 }
+
+.interactive-wrapper{
+	width: 100%;
+}
+
+.country{
+	fill:#efefef;
+	stroke:#ffffff;
+	stroke-width:1px;
+}
+
+.selected{
+	stroke: #f5be2c;
+	fill: #f6f6f6;
+}
+
+.bubble{
+	fill: #f5be2c;
+	opacity: .3;
+}
