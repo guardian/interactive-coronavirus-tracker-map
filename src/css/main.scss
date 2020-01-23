@@ -16,18 +16,40 @@
 	width: 100%;
 }
 
-.country{
-	fill:#efefef;
-	stroke:#ffffff;
-	stroke-width:1px;
-}
 
 .selected{
-	stroke: #f5be2c;
-	fill: #f6f6f6;
+	//stroke: #f5be2c;
+	//fill: #f5be2c;
+	//opacity: .2;
+
 }
 
 .bubble{
-	fill: #f5be2c;
-	opacity: .3;
+	/* fill: #f5be2c;
+	opacity: .3; */
 }
+
+.city{
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 14px;
+}
+.capital{
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 14px;
+	font-weight: 900;
+}
+
+svg{
+	border:1px solid red;
+}
+
+.country{
+	stroke-width:1px;
+	fill:#efefef;
+
+	@include mq(mobile){stroke: #efefef;}
+	@include mq(tablet){stroke: #ffffff;}
+
+	
+}
+
