@@ -38,10 +38,16 @@
 	font-size: 14px;
 	font-weight: 900;
 }
-
-svg{
-	border:1px solid red;
+.country-label{
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 14px;
+	font-weight: 900;
 }
+.country-cases{
+	font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	font-size: 14px;
+}
+
 
 .country{
 	stroke-width:1px;
@@ -49,7 +55,10 @@ svg{
 
 	@include mq(mobile){stroke: #efefef;}
 	@include mq(tablet){stroke: #ffffff;}
+}
 
-	
+
+tspan {
+    display: inline-block ;
 }
 
