@@ -21,8 +21,7 @@ let path = d3.geoPath()
 .projection(projection)
 
 let radius = d3.scaleSqrt()
-.domain([0, 10])
-.range([0, 10]);
+.range([0, 50]);
 
 const world = topojson.feature(worldMap, worldMap.objects.ne_10m_admin_0_countries);
 
@@ -104,6 +103,11 @@ const makeMaps = () => {
 }
 
 const parseData = (sheet) => {
+
+	//let cases = sheet.data.filter( c => +c.cases > 0 )
+	let max = d3.max(sheet.data, d => +d.cases );
+
+	radius.domain([0, max])
 
 	sheet.data.map( d => {
 
