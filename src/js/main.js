@@ -48,6 +48,3 @@ if (!Array.prototype.find) {
     }
   });
 }
-
-
-window.resize()

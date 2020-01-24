@@ -9,7 +9,9 @@ const d3 = Object.assign({}, d3B, topojson, geo);
 
 const atomEl = $('.interactive-wrapper')
 
-let isMobile = window.matchMedia('(max-width: 600px)').matches;
+const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
+const isPreview = document.referrer && document.referrer.indexOf('gutools') > -1
 
 let width = atomEl.getBoundingClientRect().width;
 let height =  isMobile ? width : width * 2.5 / 5;
@@ -39,11 +41,8 @@ let map;
 let east;
 let west;
 
-
-
 const fillFurniture = (furniture) => {
 
-	console.log(furniture[0].text)
 	d3.select('.headline').html(furniture[0].text)
 	d3.select('.timestamp').html(furniture[2].text)
 	d3.select('.source').html(furniture[1].text)
@@ -104,12 +103,29 @@ const makeMaps = () => {
 
 const parseData = (sheet) => {
 
-	//let cases = sheet.data.filter( c => +c.cases > 0 )
-	let max = d3.max(sheet.data, d => +d.cases );
+
+	let data;
+
+	if (isPreview) {
+		data = sheet.preview;
+
+
+		console.log("=================== PREVIEW VERSION ==================")
+
+
+	} else {
+		data = sheet.data;
+
+
+		console.log("=================== LIVE VERSION ==================")
+	}
+
+	let max = d3.max(data, d => +d.cases );
 
 	radius.domain([0, max])
 
-	sheet.data.map( d => {
+
+	data.map( d => {
 
 		let feature = topojson.feature(worldMap, worldMap.objects.ne_10m_admin_0_countries).features.filter( s => s.properties.ISO_A3 === d.ISO_A3)
 		let centroid = path.centroid(feature[0])
@@ -132,10 +148,6 @@ const parseData = (sheet) => {
 			.attr("r", radius(d.cases))
 			.attr("cx", centroid[0])
 			.attr("cy", centroid[1])
-			.style("stroke-opacity", 1)
-			.style("stroke", '#f5be2c')
-			.style("fill-opacity", .3)
-			.style("fill", '#f5be2c')
 
 			if(d.display != 'none')
 			{
@@ -183,10 +195,6 @@ const parseData = (sheet) => {
 			.attr("r", radius(d.cases))
 			.attr("cx", centroid[0])
 			.attr("cy", centroid[1])
-			.style("stroke-opacity", 1)
-			.style("stroke", '#f5be2c')
-			.style("fill-opacity", .3)
-			.style("fill", '#f5be2c')
 
 			if(d.display != 'none')
 			{
@@ -230,10 +238,6 @@ const parseData = (sheet) => {
 			.attr("r", radius(d.cases))
 			.attr("cx", centroid[0])
 			.attr("cy", centroid[1])
-			.style("stroke-opacity", 1)
-			.style("stroke", '#f5be2c')
-			.style("fill-opacity", .3)
-			.style("fill", '#f5be2c')
 
 			if(d.display != 'none')
 			{
