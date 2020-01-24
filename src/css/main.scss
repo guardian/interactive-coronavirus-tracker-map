@@ -57,8 +57,21 @@
 	@include mq(tablet){stroke: #ffffff;}
 }
 
-
-tspan {
-    display: inline-block ;
+.headline{@include fs-header(5);}
+.timestamp{	
+	margin-left: 0px;
+    font-size: 13px;
+    font-family: "Guardian Text Sans Web","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+    color: #767676;
 }
-
+.source{
+	padding: 6px 0 6px 0;
+	margin: 0;
+	font-family: 'Guardian Text Sans Web', Arial, sans-serif;
+	font-size: 12px;
+	line-height: 15px;
+	color:#767676;
+	display: inline-block;
+	width: 100%;
+	border-bottom: 1px solid #dcdcdc;
+}

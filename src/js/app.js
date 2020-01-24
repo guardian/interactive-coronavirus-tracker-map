@@ -42,9 +42,18 @@ let west;
 
 loadJson('https://interactive.guim.co.uk/docsdata-test/1mspXyy089HhJmEiydttWWVt7knyg8k9nmSGNajTyQDw.json')
 .then( fileRaw => {
+	fillFurniture(fileRaw.sheets.furniture)
 	makeMaps()
 	parseData (fileRaw.sheets)
 })
+
+const fillFurniture = (furniture) => {
+
+	console.log(furniture[0].text)
+	d3.select('.headline').html(furniture[0].text)
+	d3.select('.timestamp').html(furniture[2].text)
+	d3.select('.source').html(furniture[1].text)
+}
 
 const makeMaps = () => {
 
@@ -104,6 +113,9 @@ const parseData = (sheet) => {
 	sheet.data.map( d => {
 
 		let feature = topojson.feature(worldMap, worldMap.objects.ne_10m_admin_0_countries).features.filter( s => s.properties.ISO_A3 === d.ISO_A3)
+		let centroid = path.centroid(feature[0])
+
+		if(d.lat) centroid = projection([d.lon, d.lat])
 
 		if(!isMobile){
 
@@ -119,8 +131,8 @@ const parseData = (sheet) => {
 			.append('circle')
 			.attr("class", "bubble")
 			.attr("r", radius(d.cases))
-			.attr("cx", path.centroid(feature[0])[0])
-			.attr("cy", path.centroid(feature[0])[1])
+			.attr("cx", centroid[0])
+			.attr("cy", centroid[1])
 			.style("stroke-opacity", 1)
 			.style("stroke", '#f5be2c')
 			.style("fill-opacity", .3)
@@ -128,10 +140,9 @@ const parseData = (sheet) => {
 
 			if(d.display != 'none')
 			{
-				console.log(d.offset)
 
 				let label = map.select('.labels').append('text')
-				.attr('transform', 'translate(' + path.centroid(feature[0])[0] + ',' + path.centroid(feature[0])[1] + ')')
+				.attr('transform', 'translate(' + centroid[0] + ',' + centroid[1] + ')')
 				.attr('width', '20px')
 				.attr('height', '20px')
 				.style('border', '1px')
@@ -156,6 +167,9 @@ const parseData = (sheet) => {
 
 			projection.fitExtent([[0, 0], [width, height]], rest);
 
+			if(d.lat) centroid = projection([d.lon, d.lat])
+			else centroid = path.centroid(feature[0])
+
 			east.select('.countries')
 			.append('g')
 			.selectAll('path')
@@ -168,8 +182,8 @@ const parseData = (sheet) => {
 			.append('circle')
 			.attr("class", "bubble")
 			.attr("r", radius(d.cases))
-			.attr("cx", path.centroid(feature[0])[0])
-			.attr("cy", path.centroid(feature[0])[1])
+			.attr("cx", centroid[0])
+			.attr("cy", centroid[1])
 			.style("stroke-opacity", 1)
 			.style("stroke", '#f5be2c')
 			.style("fill-opacity", .3)
@@ -179,7 +193,7 @@ const parseData = (sheet) => {
 			{
 
 					let label = east.select('.labels').append('text')
-					.attr('transform', 'translate(' + path.centroid(feature[0])[0] + ',' +path.centroid(feature[0])[1] + ')')
+					.attr('transform', 'translate(' + path.centroid(feature[0])[0] + ',' + path.centroid(feature[0])[1] + ')')
 					.attr('width', '20px')
 					.attr('height', '20px')
 					.style('border', '1px')
@@ -200,6 +214,9 @@ const parseData = (sheet) => {
 
 			projection.fitExtent([[0, 0], [width, height]], america);
 
+			if(d.lat) centroid = projection([d.lon, d.lat])
+			else centroid = path.centroid(feature[0])
+
 			west.select('.countries')
 			.append('g')
 			.selectAll('path')
@@ -212,8 +229,8 @@ const parseData = (sheet) => {
 			.append('circle')
 			.attr("class", "bubble")
 			.attr("r", radius(d.cases))
-			.attr("cx", path.centroid(feature[0])[0])
-			.attr("cy", path.centroid(feature[0])[1])
+			.attr("cx", centroid[0])
+			.attr("cy", centroid[1])
 			.style("stroke-opacity", 1)
 			.style("stroke", '#f5be2c')
 			.style("fill-opacity", .3)
@@ -222,7 +239,7 @@ const parseData = (sheet) => {
 			if(d.display != 'none')
 			{
 				let label = west.select('.labels').append('text')
-				.attr('transform', 'translate(' + path.centroid(feature[0])[0] + ',' +path.centroid(feature[0])[1] + ')')
+				.attr('transform', 'translate(' + centroid[0] + ',' + centroid[1] + ')')
 				.attr('width', '20px')
 				.attr('height', '20px')
 				.style('border', '1px')
