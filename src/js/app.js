@@ -40,12 +40,7 @@ let map;
 let east;
 let west;
 
-loadJson('https://interactive.guim.co.uk/docsdata-test/1mspXyy089HhJmEiydttWWVt7knyg8k9nmSGNajTyQDw.json')
-.then( fileRaw => {
-	fillFurniture(fileRaw.sheets.furniture)
-	makeMaps()
-	parseData (fileRaw.sheets)
-})
+
 
 const fillFurniture = (furniture) => {
 
@@ -378,3 +373,12 @@ const parseData = (sheet) => {
 
 	})
 }
+
+
+loadJson('https://interactive.guim.co.uk/docsdata-test/1mspXyy089HhJmEiydttWWVt7knyg8k9nmSGNajTyQDw.json')
+.then( fileRaw => {
+	fillFurniture(fileRaw.sheets.furniture);
+	makeMaps();
+	parseData (fileRaw.sheets);
+	window.resize();
+})
