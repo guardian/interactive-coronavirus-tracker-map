@@ -11,7 +11,20 @@ const atomEl = $('.interactive-wrapper')
 
 const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
-const isPreview = document.referrer && document.referrer.indexOf('gutools') > -1
+let isPreview = document.referrer && document.referrer.indexOf('gutools') > -1;
+
+if(window)
+{
+	if(window.location)
+	{
+		if(window.location.ancestorOrigins)
+		{
+			if(window.location.ancestorOrigins['0'].indexOf('gutools') > -1)isPreview = true;
+			
+		}
+	}
+	
+}
 
 let width = atomEl.getBoundingClientRect().width;
 let height =  isMobile ? width : width * 2.5 / 5;
@@ -291,7 +304,7 @@ const parseData = (sheet) => {
 		if(!isMobile)
 		{
 			map
-			.selectAll('circle')
+			.selectAll('.bubbles circle')
 			.style(s.style, s.value)
 		}
 		else
