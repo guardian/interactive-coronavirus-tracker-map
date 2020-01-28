@@ -36,7 +36,7 @@ let path = d3.geoPath()
 .projection(projection)
 
 let radius = d3.scaleSqrt()
-.range([0, 50]);
+.range([0, 80]);
 
 const world = topojson.feature(worldMap, worldMap.objects.ne_10m_admin_0_countries);
 
@@ -143,6 +143,8 @@ const parseData = (sheet) => {
 		let feature = topojson.feature(worldMap, worldMap.objects.ne_10m_admin_0_countries).features.filter( s => s.properties.ISO_A3 === d.ISO_A3)
 		let centroid = path.centroid(feature[0])
 
+		//console.log(d, +d.cases, radius(+d.cases))
+
 		if(d.lat) centroid = projection([d.lon, d.lat])
 
 		if(!isMobile){
@@ -158,7 +160,7 @@ const parseData = (sheet) => {
 			map.select('.bubbles')
 			.append('circle')
 			.attr("class", "bubble")
-			.attr("r", radius(d.cases))
+			.attr("r", radius(+d.cases))
 			.attr("cx", centroid[0])
 			.attr("cy", centroid[1])
 
@@ -205,7 +207,7 @@ const parseData = (sheet) => {
 			east.select('.bubbles')
 			.append('circle')
 			.attr("class", "bubble")
-			.attr("r", radius(d.cases))
+			.attr("r", radius(+d.cases))
 			.attr("cx", centroid[0])
 			.attr("cy", centroid[1])
 
@@ -248,7 +250,7 @@ const parseData = (sheet) => {
 			west.select('.bubbles')
 			.append('circle')
 			.attr("class", "bubble")
-			.attr("r", radius(d.cases))
+			.attr("r", radius(+d.cases))
 			.attr("cx", centroid[0])
 			.attr("cy", centroid[1])
 
@@ -401,5 +403,5 @@ loadJson('https://interactive.guim.co.uk/docsdata-test/1mspXyy089HhJmEiydttWWVt7
 	fillFurniture(fileRaw.sheets.furniture);
 	makeMaps();
 	parseData (fileRaw.sheets);
-	window.resize();
+	//window.resize();
 })
