@@ -58,7 +58,7 @@ const fillFurniture = (furniture) => {
 
 	d3.select('.headline').html(furniture[0].text)
 	d3.select('.timestamp').html(furniture[2].text)
-	d3.select('.source').html(furniture[1].text)
+	d3.select('.source').html(furniture[1].text + ' Note: ') 
 }
 
 const makeMaps = () => {
@@ -137,11 +137,15 @@ const parseData = (sheet) => {
 
 	radius.domain([0, max])
 
+	let others = d3.select('.source').text();
+
 
 	data.map( d => {
 
 		let feature = topojson.feature(worldMap, worldMap.objects.ne_10m_admin_0_countries).features.filter( s => s.properties.ISO_A3 === d.ISO_A3)
 		let centroid = path.centroid(feature[0])
+
+		//console.log(d.offset_horizontal, d.offset_vertical)
 
 		//console.log(d, +d.cases, radius(+d.cases))
 
@@ -177,15 +181,33 @@ const parseData = (sheet) => {
 				.append("tspan")
 				.attr('class','country-label')
 				.text(d.NAME)
-				.attr('x', d.offset)
+				.attr('x', d.offset_horizontal) 
+				.attr('y', -(d.offset_vertical) )
 
 				label
 				.append('tspan')
 				.attr('class','country-cases')
 				.text(d.text)
-				.attr('x', d.offset)
-				.attr('dy', "15")
+				.attr('x', d.offset_horizontal)
+				.attr('dy', '15' )
+
+				console.log('d.offset_horizontal')
 			}
+			else{
+
+				let ctext = +d.text;
+
+				if(ctext > 1)ctext = 'cases'
+				else ctext = 'case'
+
+					console.log(d)
+
+				others += d.NAME + ', ' +  d.text + ' ' + ctext + '; ';
+
+				d3.select('.source').html(others)
+			}
+
+			
 			
 
 		}
@@ -224,14 +246,28 @@ const parseData = (sheet) => {
 					.append("tspan")
 					.attr('class','country-label')
 					.text(d.NAME)
-					.attr('x', d.offset)
+					.attr('x', d.offset_horizontal) 
+					.attr('y', -(d.offset_vertical) )
 
 					label
 					.append('tspan')
 					.attr('class','country-cases')
 					.text(d.text)
-					.attr('x', d.offset)
-					.attr('dy', "15")
+					.attr('x', d.offset_horizontal)
+					.attr('dy', '15' )
+			}
+			else{
+
+				let ctext = +d.text;
+
+				if(ctext > 1)ctext = 'cases'
+				else ctext = 'case'
+
+					console.log(d)
+
+				others += d.NAME + ', ' +  d.text + ' ' + ctext + '; ';
+
+				d3.select('.source').html(others)
 			}
 
 			projection.fitExtent([[0, 0], [width, height]], america);
@@ -278,7 +314,13 @@ const parseData = (sheet) => {
 
 		}
 
+		
+
 	})
+
+	let s = d3.select('.source').text();
+
+	d3.select('.source').html(s.substr(0, s.length - 2))
 
 	sheet.style.filter(s => s.feature === "selected-country").map(s => {
 
@@ -403,5 +445,5 @@ loadJson('https://interactive.guim.co.uk/docsdata-test/1mspXyy089HhJmEiydttWWVt7
 	fillFurniture(fileRaw.sheets.furniture);
 	makeMaps();
 	parseData (fileRaw.sheets);
-	//window.resize();
+	window.resize();
 })
