@@ -65,7 +65,9 @@ const makeMaps = () => {
 
 	if(!isMobile)
 	{
-		map = d3.select('.interactive-wrapper').append('svg').attr('width', width).attr('height', height);
+		map = d3.select('.interactive-wrapper').append('svg')
+		.attr('id', 'svg-coronavirus-world-map')
+		.attr('width', width).attr('height', height);
 		map.append('g').attr('class', 'base-map')
 		map.append('g').attr('class', 'countries')
 		map.append('g').attr('class', 'bubbles')
@@ -81,13 +83,17 @@ const makeMaps = () => {
 		.attr('class', d => 'country ' + d.properties.ISO_A3)
 	}
 	else{
-		east = d3.select('.interactive-wrapper').append('svg').attr('class', 'east').attr('width', width).attr('height', height );
+		east = d3.select('.interactive-wrapper').append('svg')
+		.attr('id', 'svg-coronavirus-world-map-rest')
+		.attr('class', 'east').attr('width', width).attr('height', height );
 		east.append('g').attr('class', 'base-map')
 		east.append('g').attr('class', 'countries')
 		east.append('g').attr('class', 'bubbles')
 		east.append('g').attr('class', 'labels')
 
-		west = d3.select('.interactive-wrapper').append('svg').attr('class', 'west').attr('width', width).attr('height', height );
+		west = d3.select('.interactive-wrapper').append('svg')
+		.attr('id', 'svg-coronavirus-world-map-america')
+		.attr('class', 'west').attr('width', width).attr('height', height );
 		west.append('g').attr('class', 'base-map')
 		west.append('g').attr('class', 'countries')
 		west.append('g').attr('class', 'bubbles')
