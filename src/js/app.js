@@ -58,7 +58,7 @@ const fillFurniture = (furniture) => {
 
 	d3.select('.headline').html(furniture[0].text)
 	d3.select('.timestamp').html(furniture[2].text)
-	d3.select('.source').html(furniture[1].text + ' Note: ') 
+	d3.select('.source').html(furniture[1].text + ' | Note: ') 
 }
 
 const makeMaps = () => {
@@ -151,93 +151,28 @@ const parseData = (sheet) => {
 
 		if(d.lat) centroid = projection([d.lon, d.lat])
 
-		if(!isMobile){
+			if(!isMobile){
 
-			map.select('.countries')
-			.append('g')
-			.selectAll('path')
-			.data(feature)
-			.enter()
-			.append("path")
-			.attr("d", path)
+				map.select('.countries')
+				.append('g')
+				.selectAll('path')
+				.data(feature)
+				.enter()
+				.append("path")
+				.attr("d", path)
 
-			map.select('.bubbles')
-			.append('circle')
-			.attr("class", "bubble")
-			.attr("r", radius(+d.cases))
-			.attr("cx", centroid[0])
-			.attr("cy", centroid[1])
+				map.select('.bubbles')
+				.append('circle')
+				.attr("class", "bubble")
+				.attr("r", radius(+d.cases))
+				.attr("cx", centroid[0])
+				.attr("cy", centroid[1])
 
-			if(d.display != 'none')
-			{
+				if(d.display != 'none')
+				{
 
-				let label = map.select('.labels').append('text')
-				.attr('transform', 'translate(' + centroid[0] + ',' + centroid[1] + ')')
-				.attr('width', '20px')
-				.attr('height', '20px')
-				.style('border', '1px')
-
-				label
-				.append("tspan")
-				.attr('class','country-label')
-				.text(d.NAME)
-				.attr('x', d.offset_horizontal) 
-				.attr('y', -(d.offset_vertical) )
-
-				label
-				.append('tspan')
-				.attr('class','country-cases')
-				.text(d.text)
-				.attr('x', d.offset_horizontal)
-				.attr('dy', '15' )
-
-				console.log('d.offset_horizontal')
-			}
-			else{
-
-				let ctext = +d.text;
-
-				if(ctext > 1)ctext = 'cases'
-				else ctext = 'case'
-
-					console.log(d)
-
-				others += d.NAME + ', ' +  d.text + ' ' + ctext + '; ';
-
-				d3.select('.source').html(others)
-			}
-
-			
-			
-
-		}
-		else{
-
-			projection.fitExtent([[0, 0], [width, height]], rest);
-
-			if(d.lat) centroid = projection([d.lon, d.lat])
-			else centroid = path.centroid(feature[0])
-
-			east.select('.countries')
-			.append('g')
-			.selectAll('path')
-			.data(feature)
-			.enter()
-			.append("path")
-			.attr("d", path)
-
-			east.select('.bubbles')
-			.append('circle')
-			.attr("class", "bubble")
-			.attr("r", radius(+d.cases))
-			.attr("cx", centroid[0])
-			.attr("cy", centroid[1])
-
-			if(d.display != 'none')
-			{
-
-					let label = east.select('.labels').append('text')
-					.attr('transform', 'translate(' + path.centroid(feature[0])[0] + ',' + path.centroid(feature[0])[1] + ')')
+					let label = map.select('.labels').append('text')
+					.attr('transform', 'translate(' + centroid[0] + ',' + centroid[1] + ')')
 					.attr('width', '20px')
 					.attr('height', '20px')
 					.style('border', '1px')
@@ -255,121 +190,213 @@ const parseData = (sheet) => {
 					.text(d.text)
 					.attr('x', d.offset_horizontal)
 					.attr('dy', '15' )
-			}
-			else{
 
-				let ctext = +d.text;
+				}
+				else{
 
-				if(ctext > 1)ctext = 'cases'
-				else ctext = 'case'
+					let ctext = +d.text;
 
-					console.log(d)
+					if(ctext > 1)ctext = 'cases'
+						else ctext = 'case'
 
-				others += d.NAME + ', ' +  d.text + ' ' + ctext + '; ';
+							console.log(d)
 
-				d3.select('.source').html(others)
-			}
+						others += d.NAME + ', ' +  d.text + ' ' + ctext + '; ';
 
-			projection.fitExtent([[0, 0], [width, height]], america);
+						d3.select('.source').html(others)
+					}
 
-			if(d.lat) centroid = projection([d.lon, d.lat])
-			else centroid = path.centroid(feature[0])
 
-			west.select('.countries')
-			.append('g')
-			.selectAll('path')
-			.data(feature)
-			.enter()
-			.append("path")
-			.attr("d", path)
 
-			west.select('.bubbles')
-			.append('circle')
-			.attr("class", "bubble")
-			.attr("r", radius(+d.cases))
-			.attr("cx", centroid[0])
-			.attr("cy", centroid[1])
 
-			if(d.display != 'none')
-			{
-				let label = west.select('.labels').append('text')
-				.attr('transform', 'translate(' + centroid[0] + ',' + centroid[1] + ')')
-				.attr('width', '20px')
-				.attr('height', '20px')
-				.style('border', '1px')
+				}
+				else{
 
-				label
-				.append("tspan")
-				.attr('class','country-label')
-				.text(d.NAME)
-				.attr('x', d.offset)
+					projection.fitExtent([[0, 0], [width, height]], rest);
 
-				label
-				.append('tspan')
-				.attr('class','country-cases')
-				.text(d.text)
-				.attr('x', d.offset)
-				.attr('dy', "15")
-			}
+					if(d.lat) centroid = projection([d.lon, d.lat])
+						else centroid = path.centroid(feature[0])
 
-		}
+							east.select('.countries')
+						.append('g')
+						.selectAll('path')
+						.data(feature)
+						.enter()
+						.append("path")
+						.attr("d", path)
 
-		
+						east.select('.bubbles')
+						.append('circle')
+						.attr("class", "bubble")
+						.attr("r", radius(+d.cases))
+						.attr("cx", centroid[0])
+						.attr("cy", centroid[1])
 
-	})
+						if(d.display != 'none')
+						{
 
-	let s = d3.select('.source').text();
+							let label = east.select('.labels').append('text')
+							.attr('transform', 'translate(' + path.centroid(feature[0])[0] + ',' + path.centroid(feature[0])[1] + ')')
+							.attr('width', '20px')
+							.attr('height', '20px')
+							.style('border', '1px')
 
-	d3.select('.source').html(s.substr(0, s.length - 2))
+							label
+							.append("tspan")
+							.attr('class','country-label')
+							.text(d.NAME)
+							.attr('x', d.offset_horizontal) 
+							.attr('y', -(d.offset_vertical) )
 
-	sheet.style.filter(s => s.feature === "selected-country").map(s => {
+							label
+							.append('tspan')
+							.attr('class','country-cases')
+							.text(d.text)
+							.attr('x', d.offset_horizontal)
+							.attr('dy', '15' )
+						}
+						else{
 
-		if(!isMobile)
+							let ctext = +d.text;
+
+							if(ctext > 1)ctext = 'cases'
+								else ctext = 'case'
+
+									console.log(d)
+
+								others += d.NAME + ', ' +  d.text + ' ' + ctext + '; ';
+
+								d3.select('.source').html(others)
+							}
+
+							projection.fitExtent([[0, 0], [width, height]], america);
+
+							if(d.lat) centroid = projection([d.lon, d.lat])
+							else centroid = path.centroid(feature[0])
+
+								west.select('.countries')
+								.append('g')
+								.selectAll('path')
+								.data(feature)
+								.enter()
+								.append("path")
+								.attr("d", path)
+
+								west.select('.bubbles')
+								.append('circle')
+								.attr("class", "bubble")
+								.attr("r", radius(+d.cases))
+								.attr("cx", centroid[0])
+								.attr("cy", centroid[1])
+
+
+							if(d.display != 'none' && d3.geoContains(america, [d.lon, d.lat]))
+							{
+									let label = west.select('.labels').append('text')
+									.attr('transform', 'translate(' + centroid[0] + ',' + centroid[1] + ')')
+									.attr('width', '20px')
+									.attr('height', '20px')
+									.style('border', '1px')
+
+									label
+									.append("tspan")
+									.attr('class','country-label')
+									.text(d.NAME)
+									.attr('x', d.offset_horizontal) 
+									.attr('y', -(d.offset_vertical) )
+
+									label
+									.append('tspan')
+									.attr('class','country-cases')
+									.text(d.text)
+									.attr('x', d.offset_horizontal)
+									.attr('dy', '15' )
+							}
+
+						}
+
+
+
+					})
+
+let s = d3.select('.source').text();
+
+d3.select('.source').html(s.substr(0, s.length - 2))
+
+sheet.style.filter(s => s.feature === "selected-country").map(s => {
+
+	if(!isMobile)
+	{
+		map
+		.selectAll('.countries g path')
+		.style(s.style, s.value)
+	}
+	else
+	{
+		east
+		.selectAll('.countries g path')
+		.style(s.style, s.value)
+
+		west
+		.selectAll('.countries g path')
+		.style(s.style, s.value)
+	}
+
+})
+
+sheet.style.filter(s => s.feature === "bubble").map(s => {
+
+	if(!isMobile)
+	{
+		map
+		.selectAll('.bubbles circle')
+		.style(s.style, s.value)
+	}
+	else
+	{
+		east
+		.selectAll('circle')
+		.style(s.style, s.value)
+
+		west
+		.selectAll('circle')
+		.style(s.style, s.value)
+	}
+})
+
+sheet.cities.map(c => {
+
+	if(!isMobile){
+
+		if(c.display != "none")
 		{
 			map
-			.selectAll('.countries g path')
-			.style(s.style, s.value)
-		}
-		else
-		{
-			east
-			.selectAll('.countries g path')
-			.style(s.style, s.value)
+			.append('rect')
+			.attr('width', 5)
+			.attr('height', 5)
+			.attr('x', projection([c.lon, c.lat])[0])
+			.attr('y', projection([c.lon, c.lat])[1])
+			.style('fill', '#333333')
+			.style('stroke', '#FFFFFF')
 
-			west
-			.selectAll('.countries g path')
-			.style(s.style, s.value)
-		}
-		
-	})
-
-	sheet.style.filter(s => s.feature === "bubble").map(s => {
-
-		if(!isMobile)
-		{
 			map
-			.selectAll('.bubbles circle')
-			.style(s.style, s.value)
+			.append('text')
+			.attr('x', projection([c.lon, c.lat])[0] + 5)
+			.attr('y', projection([c.lon, c.lat])[1] + 5)
+			.attr('class',c.type)
+			.text(c.city)
 		}
-		else
+	}
+	else{
+
+		projection.fitExtent([[0, 0], [width, height]], rest);
+
+
+		if(c.display != "none")
 		{
-			east
-			.selectAll('circle')
-			.style(s.style, s.value)
-
-			west
-			.selectAll('circle')
-			.style(s.style, s.value)
-		}
-	})
-
-	sheet.cities.map(c => {
-
-		if(!isMobile){
-
-			if(c.display != "none")
+			if(d3.geoContains(rest, [c.lon, c.lat]))
 			{
-				map
+				east
 				.append('rect')
 				.attr('width', 5)
 				.attr('height', 5)
@@ -378,7 +405,28 @@ const parseData = (sheet) => {
 				.style('fill', '#333333')
 				.style('stroke', '#FFFFFF')
 
-				map
+				east
+				.append('text')
+				.attr('x', projection([c.lon, c.lat])[0] + 5)
+				.attr('y', projection([c.lon, c.lat])[1] + 5)
+				.attr('class',c.type)
+				.text(c.city)
+			}
+
+			projection.fitExtent([[0, 0], [width, height]], america);
+
+			if(d3.geoContains(america, [c.lon, c.lat]))
+			{
+				west
+				.append('rect')
+				.attr('width', 5)
+				.attr('height', 5)
+				.attr('x', projection([c.lon, c.lat])[0])
+				.attr('y', projection([c.lon, c.lat])[1])
+				.style('fill', '#333333')
+				.style('stroke', '#FFFFFF')
+
+				west
 				.append('text')
 				.attr('x', projection([c.lon, c.lat])[0] + 5)
 				.attr('y', projection([c.lon, c.lat])[1] + 5)
@@ -386,57 +434,10 @@ const parseData = (sheet) => {
 				.text(c.city)
 			}
 		}
-		else{
-
-			projection.fitExtent([[0, 0], [width, height]], rest);
+	}
 
 
-			if(c.display != "none")
-			{
-				if(d3.geoContains(rest, [c.lon, c.lat]))
-				{
-					east
-					.append('rect')
-					.attr('width', 5)
-					.attr('height', 5)
-					.attr('x', projection([c.lon, c.lat])[0])
-					.attr('y', projection([c.lon, c.lat])[1])
-					.style('fill', '#333333')
-					.style('stroke', '#FFFFFF')
-
-					east
-					.append('text')
-					.attr('x', projection([c.lon, c.lat])[0] + 5)
-					.attr('y', projection([c.lon, c.lat])[1] + 5)
-					.attr('class',c.type)
-					.text(c.city)
-				}
-
-				projection.fitExtent([[0, 0], [width, height]], america);
-
-				if(d3.geoContains(america, [c.lon, c.lat]))
-				{
-					west
-					.append('rect')
-					.attr('width', 5)
-					.attr('height', 5)
-					.attr('x', projection([c.lon, c.lat])[0])
-					.attr('y', projection([c.lon, c.lat])[1])
-					.style('fill', '#333333')
-					.style('stroke', '#FFFFFF')
-
-					west
-					.append('text')
-					.attr('x', projection([c.lon, c.lat])[0] + 5)
-					.attr('y', projection([c.lon, c.lat])[1] + 5)
-					.attr('class',c.type)
-					.text(c.city)
-				}
-			}
-		}
-
-
-	})
+})
 }
 
 
